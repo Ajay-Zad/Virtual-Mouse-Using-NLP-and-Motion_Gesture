@@ -43,7 +43,7 @@ while True:
     try:
         with sr.Microphone() as source:
             print("listing")       
-            voice = listener.listen(source)
+            voice = listener.listen(source,0.40,1)
             command = listener.recognize_google(voice)
             print(command)
     except:
