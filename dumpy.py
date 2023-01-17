@@ -4,21 +4,14 @@ import pyautogui
 import speech_recognition as sr
 import pyttsx3
 import pyaudio
-import sys
-import pywhatkit
-import datetime
-import wikipedia
-import pyjokes
-from geopy import distance
-from geopy.geocoders import Nominatim
-import requests
-import folium
+
 
 ans = int(input("enter 0  for head and 1 for hand: "))
 if ans == 0:
     cam = cv2.VideoCapture(0)
     face_mesh = mp.solutions.face_mesh.FaceMesh(refine_landmarks=True)
     screen_w, screen_h = pyautogui.size()
+    pyautogui.FAILSAFE = False
     while True:
         _, frame = cam.read()
         frame = cv2.flip(frame,1)
@@ -38,16 +31,46 @@ if ans == 0:
                     screen_y = int(landmark.y * screen_h)
                     pyautogui.moveTo(screen_x,screen_y)
                     print(screen_x,screen_y)
-        cv2.imshow("Eye controlled mouse",frame)
+        cv2.imshow("HEAD controlled mouse",frame)
         cv2.waitKey(1)
         
         listener = sr.Recognizer()
         try:
             with sr.Microphone() as source:
                 print("listing")       
-                voice = listener.listen(source,0.40,1)
-                command = listener.recognize_google(voice)
+                listener.adjust_for_ambient_noise(source)
+                voice = listener.listen(source,.75,1.75)
+                command = str(listener.recognize_google(voice))
                 print(command)
+                c1 = command.lower()
+                print(c1)
+                if 'final' in c1 :
+                    print("left click")
+                    pyautogui.click()
+                elif 'right click' in c1:
+                    print("rc")
+                    pyautogui.click(button='right')
+                elif 'double' in c1:
+                    print("DC")
+                    pyautogui.doubleClick()
+                elif 'bel' in c1:
+                    print("scrolling down")
+                    pyautogui.scroll(-600)
+                elif 'abo' in c1:
+                    print("scrolling up")
+                    pyautogui.scroll(600)
+                elif 'start' in c1:
+                    print("closing..")
+                    pyautogui.click(0,1079)
+                elif 'close' in c1:
+                    print("closing..")
+                    pyautogui.click(1872,24)
+                elif 'screen' in c1:
+                    print("Screenshot")
+                    pyautogui.screenshot() 
+                else:
+                    pass
+                    
         except:
             pass
 else:
