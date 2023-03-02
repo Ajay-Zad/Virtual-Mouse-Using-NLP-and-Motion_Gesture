@@ -39,7 +39,7 @@ if ans == 0:
             with sr.Microphone() as source:
                 print("listing")       
                 listener.adjust_for_ambient_noise(source)
-                voice = listener.listen(source,.5,1.75)
+                voice = listener.listen(source,.25,1)
                 command = str(listener.recognize_google(voice))
                 print(command)
                 c1 = command.lower()
@@ -48,17 +48,17 @@ if ans == 0:
                     print("left click")
                     pyautogui.click()
                 elif 'right' in c1:
-                    print("rc")
+                    print("right clcik")
                     pyautogui.click(button='right')
-                elif 'double' in c1:
-                    print("DC")
+                elif 'double' in c1 or 'click' in c1:
+                    print("Double click")
                     pyautogui.doubleClick()
-                elif 'bel' in c1:
+                elif 'down' in c1:
                     print("scrolling down")
-                    pyautogui.scroll(-600)
-                elif 'abo' in c1:
+                    pyautogui.scroll(-1500)
+                elif 'up' in c1 or 'scroll' in c1:
                     print("scrolling up")
-                    pyautogui.scroll(600)
+                    pyautogui.scroll(1500)
                 elif 'start' in c1:
                     print("closing..")
                     pyautogui.click(0,1079)
@@ -68,6 +68,9 @@ if ans == 0:
                 elif 'min' in c1:
                     print("Minimize")
                     pyautogui.click(1776,-29) 
+                elif 'add' in c1:
+                    print("Address bar")
+                    pyautogui.click(258,55) 
                 else:
                     pass
                     
@@ -91,6 +94,7 @@ else:
             for id,landmark in enumerate(landmarks[474:478]):
                 x = int(landmark.x * frame_w)
                 y = int(landmark.y * frame_h)
+                print(x,y)
                 cv2.circle(frame,(x,y),3,(0,255,0))
                 if id == 1:
                     screen_x = int(landmark.x * screen_w)
@@ -102,7 +106,8 @@ else:
                 y = int(landmark.y * frame_h)
                 cv2.circle(frame,(x,y),3,(0,255,255))
             l = left[0].y - left[1].y 
-            if l < 0.004:
+            print("difference = ",l)
+            if l < 0.01:
                 print('click')
                 pyautogui.click()
                 
